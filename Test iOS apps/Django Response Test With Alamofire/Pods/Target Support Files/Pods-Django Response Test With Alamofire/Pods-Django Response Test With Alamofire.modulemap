@@ -1,0 +1,6 @@
+framework module Pods_Django_Response_Test_With_Alamofire {
+  umbrella header "Pods-Django Response Test With Alamofire-umbrella.h"
+
+  export *
+  module * { export * }
+}

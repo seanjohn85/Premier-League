@@ -1,0 +1,20 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'Django Response Test With Alamofire' do
+ pod 'Alamofire', '~> 4.5'
+  use_frameworks!
+
+  # Pods for Django Response Test With Alamofire
+
+  target 'Django Response Test With AlamofireTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'Django Response Test With AlamofireUITests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
