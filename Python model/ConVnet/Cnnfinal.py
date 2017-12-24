@@ -72,35 +72,7 @@ classifier.add(Conv2D(32, (3, 3)))
 classifier.add(Activation('relu')) 
 classifier.add(MaxPooling2D(pool_size=(2, 2)))
 
-#add an extra con layer
 
-classifier.add(Conv2D(32, (3, 3)))   
-classifier.add(Activation('relu')) 
-classifier.add(MaxPooling2D(pool_size=(2, 2)))
-
-#add an extra con layer
-
-classifier.add(Conv2D(32, (3, 3)))   
-classifier.add(Activation('relu')) 
-classifier.add(MaxPooling2D(pool_size=(2, 2)))
-
-#add an extra con layer
-
-classifier.add(Conv2D(32, (3, 3)))   
-classifier.add(Activation('relu')) 
-classifier.add(MaxPooling2D(pool_size=(2, 2)))
-
-#add an extra con layer
-
-classifier.add(Conv2D(32, (3, 3)))   
-classifier.add(Activation('relu')) 
-classifier.add(MaxPooling2D(pool_size=(2, 2)))
-
-#add an extra con layer
-
-classifier.add(Conv2D(32, (3, 3)))   
-classifier.add(Activation('relu')) 
-classifier.add(MaxPooling2D(pool_size=(2, 2)))
 
 
 #flatten layer
@@ -151,7 +123,7 @@ validation_generator = test_datagen.flow_from_directory(
         class_mode='categorical')
 
 classifier.fit_generator(train_generator,
-        steps_per_epoch=4000, epochs=100, validation_steps=20)
+        steps_per_epoch=3847, epochs=100, validation_steps=20)
 
 
 
@@ -161,18 +133,28 @@ import h5py
 
 classifier.save("model.h5")
 
+from Ipython.display import SVG
+from keras.utils.vis_utils import model_to_dot
+SVG(model_to_dot(classifier).create(prog="dot", format ="svg"))
+
+#plot graph using model
+
+from keras.utils import plot_model
+
+plot_model(classifier, "graph.png")
+
 #export model to coreml
 
 import coremltools
 
 output_labels = ["Arsenal", "Bournemouth", "Brighton", "Burnley", "Chelsea", "Crystal Palace", "Everton",
                  "Huddersfield Town", "Liverpool", "Leicester City",  "Manchester City", "Manchester United", 
-                 "Newcastle United", "Southampton", "Stoke City", "Swansea City", "Tottenham Hotspur", 
+                 "Newcastle United", "Southampton", "Tottenham Hotspur", "Stoke City", "Swansea City",  
                  "Watford", "West Bromwich Albion", "West Ham United"]
 
 scale = 1/255.
 
-coreml_gen = coremltools.converters.keras.convert("test.h5",
+coreml_gen = coremltools.converters.keras.convert("model.h5",
                                                   input_names = 'image',
                                                   image_input_names='image',
                                                   class_labels =output_labels,
@@ -181,7 +163,7 @@ coreml_gen.author = "John Kenny"
 coreml_gen.license = 'MIT'
 coreml_gen.input_description['image'] = 'Image of a football crest'
 coreml_gen.output_description['output1'] = "Predicted team"
-coreml_gen.save("test.mlmodel")
+coreml_gen.save("crestIdenifer.mlmodel")
 
 
 
