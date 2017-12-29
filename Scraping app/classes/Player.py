@@ -20,7 +20,7 @@ class Player(object):
         self.f_name = f_name
         self.l_name = l_name
         self.team = team
-        self.pos = postion(pos)
+        self.pos = pos
         self.goals = goals
         self.assits = assits
         self.saves = saves
@@ -40,16 +40,23 @@ class Player(object):
         
         
     #function to get players position
-    def postion(code):
-        if code == 1:
-            return "Goalkeeper"
-        elif code == 2:
-            return "Defender"
-        elif code == 3:
-            return "Midfielder"
-        elif code == 4:
-            return "Striker"
+# =============================================================================
+#     def postion(code):
+#         if code == 1:
+#             return "Goalkeeper"
+#         elif code == 2:
+#             return "Defender"
+#         elif code == 3:
+#             return "Midfielder"
+#         elif code == 4:
+#             return "Striker"
+# =============================================================================
         
     def dbCheck():
         #if statement to check if this object excists on the db and creates or updates
         return
+
+
+p1 = Player("", "", "", "", "", "", "", "", "", "", "",
+                 "", "", "", "", "", "", "",
+                 "", "")

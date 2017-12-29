@@ -4,6 +4,9 @@
 Created on Fri Dec 29 11:15:20 2017
 
 @author: johnkenny
+
+from FOLDER_NAME import FILENAME
+from FILENAME import CLASS_NAME FUNCTION_NAME
 """
 
 #used for json handling
@@ -26,12 +29,17 @@ def postion(code):
 print(postion(3))
 
 
-
+from Player import Player
+p1 = Player("", "", "", "", "", "", "", "", "", "", "",
+                 "", "", "", "", "", "", "",
+                 "", "")
     
     
     
 class Team(object):
     
     #constructoer to create team objects
-    def
+    def __init(self, dbid, name):
+        self.dbid = dbid
+        self.name = name
     
