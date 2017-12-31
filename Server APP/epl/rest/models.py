@@ -3,12 +3,9 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-import uuid  # The uuid module
-
 # Create your models here.
-
 class Team(models.Model):
-    code                    = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    code                    = models.IntegerField(primary_key=True,  unique=True)
     name                    = models.CharField(max_length=80)
     strength_defence_home   = models.IntegerField(default=0)
     strength_attack_home    = models.IntegerField(default=0)
@@ -20,7 +17,7 @@ class Team(models.Model):
     
     
 class Player(models.Model):
-    playerId            = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    playerId            = models.IntegerField(primary_key=True, unique=True)
     teams               = models.ForeignKey(Team, on_delete=models.CASCADE)
     f_name              = models.CharField(max_length=80)
     l_name              = models.CharField(max_length=80)
@@ -40,4 +37,4 @@ class Player(models.Model):
     influence           = models.IntegerField(default=0)
     creativity          = models.IntegerField(default=0)
     threat              = models.IntegerField(default=0)
-    news                = models.CharField(max_length=500)
+    news                = models.CharField(max_length=500, blank=True, null=True)

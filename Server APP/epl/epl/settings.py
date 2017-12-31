@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'footballdata',
+    #added the new model to create db tables from the models file in the footballerdata app
+    #'footballdata',
+    'rest'
 ]
 
 MIDDLEWARE = [

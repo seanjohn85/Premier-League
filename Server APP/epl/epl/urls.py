@@ -19,5 +19,6 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^requets/', include('requets.urls')),
     url(r'^footballdata/', include('footballdata.urls')),
+    url(r'^rest/', include('rest.urls')),
     url(r'^admin/', admin.site.urls),
 ]
