@@ -15,7 +15,7 @@ class Player(object):
     #constructer to match the pl json api lib attritubes
     def __init__(self, dbid, f_name, l_name, team, pos, goals, assits, saves, clean_sheets, number, goals_conceded,
                  own_goals, penalties_saved, photo, penalties_missed, yellow_cards, red_cards, influence,
-                 creativity, threat):
+                 creativity, threat, news):
         self.dbid = dbid
         self.f_name = f_name
         self.l_name = l_name
@@ -36,6 +36,7 @@ class Player(object):
         self.influence = influence
         self.creativity = creativity
         self.threat = threat
+        self.news = news
         
         
         
@@ -59,4 +60,4 @@ class Player(object):
 
 p1 = Player("", "", "", "", "", "", "", "", "", "", "",
                  "", "", "", "", "", "", "",
-                 "", "")
+                 "", "", "")

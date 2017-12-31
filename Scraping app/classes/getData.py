@@ -58,6 +58,8 @@ def getPlayersData():
 getPlayersData()
 
 def getTeams():
+    from Team import Team
+
     #opens the url
     #api to get all data from fantasy football in json
     hres = urllib.urlopen('https://fantasy.premierleague.com/drf/bootstrap-static')
@@ -74,5 +76,10 @@ def getTeams():
         print(team['strength_defence_away'])
         print(team['strength_overall_away'])
         
+        t1 = Team(team['code'], team['name'], team['strength_defence_home'], team['strength_attack_home'], 
+                  team['strength_overall_home'], team['strength_attack_away'], team['strength_defence_away'], 
+                  team['strength_overall_away'])
+        
         
 getTeams()
+

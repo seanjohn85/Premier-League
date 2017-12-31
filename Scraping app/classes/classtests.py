@@ -9,6 +9,13 @@ from FOLDER_NAME import FILENAME
 from FILENAME import CLASS_NAME FUNCTION_NAME
 """
 
+
+
+from Player import Player
+p1 = Player("", "", "", "", "", "", "", "", "", "", "",
+                 "", "", "", "", "", "", "",
+                 "", "")
+
 #used for json handling
 import json
 
@@ -29,17 +36,7 @@ def postion(code):
 print(postion(3))
 
 
-from Player import Player
-p1 = Player("", "", "", "", "", "", "", "", "", "", "",
-                 "", "", "", "", "", "", "",
-                 "", "")
-    
-    
-    
-class Team(object):
-    
-    #constructoer to create team objects
-    def __init(self, dbid, name):
-        self.dbid = dbid
-        self.name = name
-    
+from Team import Team
+
+t1 = Team("", "", "", "", "", 
+                 "", "", "")
