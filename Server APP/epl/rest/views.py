@@ -12,11 +12,12 @@ from .models import Team
 
 
 def index(request):
-    queryset = Team.objects.all()
+    queryset = Team.objects.filter(code = 8888888)
     str = ""
     for team in queryset:
         str = str + team.json()
-    return HttpResponse(str )
+    return HttpResponse(str)
+
 
 def testPage(request):
     return render(request, base.html, context)
