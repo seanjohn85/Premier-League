@@ -25,7 +25,8 @@ SECRET_KEY = 'dgpv3zr$453zs@unv^=fabpu8i2v$ctfgf8jie5y0v1nqy+r77'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+from socket import gethostname, gethostbyname 
+ALLOWED_HOSTS = [ gethostname(), gethostbyname(gethostname()), ] 
 
 
 # Application definition
