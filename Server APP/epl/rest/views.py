@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from django.views import View
 
 from .models import Team
+from .models import Player
 
 
 #used for json handling
@@ -36,6 +37,7 @@ def create_UpdateDB(request):
     hres = urllib.urlopen('https://fantasy.premierleague.com/drf/bootstrap-static')
     #reads the json from the url
     data = json.loads(hres.read().decode("utf-8"))
+    #loops through all teams crating or updating the database
     for team in data['teams']:
         print(team['code'])
         print(team['name'])
@@ -61,6 +63,46 @@ def create_UpdateDB(request):
                             strength_attack_away =team['strength_attack_away'],
                             strength_defence_away = team['strength_defence_away'],
                             strength_overall_away = team['strength_overall_away'])
+            
+            
+    for player in data['elements']:
+        qs = Team.objects.filter(code = player["team_code"])
+        #print(qs)
+        if qs.count() == 1:
+            for t in qs:
+                team =  t
+                print("team found")
+            queryset = Player.objects.filter(playerId = player["id"])
+            no = player["squad_number"]
+            if no is None:
+                no = 0
+            if not queryset:
+                Player.objects.create(playerId = player["id"], teams = team,
+                                      f_name = player["first_name"], l_name =player["second_name"],
+                                      pos = player["element_type"], goals = player["goals_scored"],
+                                      assits = player["assists"], saves = player["saves"], 
+                                      clean_sheets = player["clean_sheets"], number = no,
+                                      goals_conceded = player["goals_conceded"], own_goals = player["own_goals"],
+                                      penalties_saved = player["penalties_saved"], photo = player["photo"].replace(".jpg", ""),
+                                      penalties_missed = player["penalties_missed"], yellow_cards = player["yellow_cards"],
+                                      red_cards = player["red_cards"], influence = player["influence"],
+                                      creativity = player["creativity"], threat = player["threat"],
+                                      news = player["news"]
+                        )
+            else:
+                queryset.update(teams = team,
+                                      pos = player["element_type"], goals = player["goals_scored"],
+                                      assits = player["assists"], saves = player["saves"], 
+                                      clean_sheets = player["clean_sheets"], number = no,
+                                      goals_conceded = player["goals_conceded"], own_goals = player["own_goals"],
+                                      penalties_saved = player["penalties_saved"],
+                                      penalties_missed = player["penalties_missed"], yellow_cards = player["yellow_cards"],
+                                      red_cards = player["red_cards"], influence = player["influence"],
+                                      creativity = player["creativity"], threat = player["threat"],
+                                      news = player["news"]
+                        )
+
+
     return HttpResponse("complete")
             
 

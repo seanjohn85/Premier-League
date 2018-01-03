@@ -14,6 +14,10 @@ class Team(models.Model):
     strength_attack_away    = models.IntegerField(default=0)
     strength_defence_away   = models.IntegerField(default=0)
     strength_overall_away   = models.IntegerField(default=0)
+  
+    
+    def returnMe(self):
+        return self
     
     def json(self):
 
@@ -39,7 +43,7 @@ class Player(models.Model):
     teams               = models.ForeignKey(Team, on_delete=models.CASCADE)
     f_name              = models.CharField(max_length=80)
     l_name              = models.CharField(max_length=80)
-    pos                 = models.CharField(max_length=20)
+    pos                 = models.IntegerField(default=0)
     goals               = models.IntegerField(default=0)
     assits              = models.IntegerField(default=0)
     saves               = models.IntegerField(default=0)
@@ -52,9 +56,9 @@ class Player(models.Model):
     penalties_missed    = models.IntegerField(default=0)
     yellow_cards        = models.IntegerField(default=0)
     red_cards           = models.IntegerField(default=0)
-    influence           = models.IntegerField(default=0)
-    creativity          = models.IntegerField(default=0)
-    threat              = models.IntegerField(default=0)
+    influence           = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    creativity          = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    threat              = models.DecimalField(max_digits=9, decimal_places=2, default=0)
     news                = models.CharField(max_length=500, blank=True, null=True)
     def json(self):
 
