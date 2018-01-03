@@ -10,7 +10,14 @@ from django.conf.urls import url
 
 from . import views
 
+from rest_framework import routers
+
 
 urlpatterns = [
+    # Examples:
+    # url(r'^$', 'marine.views.home', name='home'),
+    # url(r'^blog/', include('blog.urls')),
     url(r'^$', views.index, name='index'),
+    url(r'^team/', views.create_UpdateDB, name='create_UpdateDB'),
+
 ]  

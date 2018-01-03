@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #added the new model to create db tables from the models file in the footballerdata app
     #'footballdata',
-    'rest'
+    'rest',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
