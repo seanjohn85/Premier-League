@@ -19,5 +19,5 @@ urlpatterns = [
     # url(r'^blog/', include('blog.urls')),
     url(r'^$', views.index, name='index'),
     url(r'^team/', views.create_UpdateDB, name='create_UpdateDB'),
-
+    url(r'^squad/', views.squad, name='squad'),
 ]  

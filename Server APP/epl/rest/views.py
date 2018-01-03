@@ -7,6 +7,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views import View
 
+#class object repersenting db tables
 from .models import Team
 from .models import Player
 
@@ -18,6 +19,8 @@ import json
 import urllib
 
 
+
+# for testing teams
 def index(request):
     queryset = Team.objects.filter(code = 8888888)
     #if the query is empty
@@ -28,6 +31,26 @@ def index(request):
         for team in queryset:
             str = str + team.json()
         return HttpResponse(str)
+    
+    
+#test return players for a team
+def squad(request):
+    #man utd team hard coded
+    teams = Team.objects.filter(code = 1)
+    if not teams:
+        return HttpResponse("error")
+    else:
+        str = ""
+        
+        for team in teams:
+            str = str + team.json() + "<br><br>"
+            playersQuery = Player.objects.filter(teams = team)
+            for p in playersQuery:
+                str = str + p.json()+ "<br><br>"
+
+        return HttpResponse(str)
+    
+    
     
     
 #method to update palyer and team opjects on the db. this is currently called by a url but will be moved to a timed interval
@@ -64,14 +87,17 @@ def create_UpdateDB(request):
                             strength_defence_away = team['strength_defence_away'],
                             strength_overall_away = team['strength_overall_away'])
             
-            
+    #loop through all the players from json file      
     for player in data['elements']:
+        #find the players team
         qs = Team.objects.filter(code = player["team_code"])
-        #print(qs)
+        #ensure only one team is returned
         if qs.count() == 1:
+            #store the team
             for t in qs:
                 team =  t
                 print("team found")
+            #search bd to see if player already stored
             queryset = Player.objects.filter(playerId = player["id"])
             no = player["squad_number"]
             if no is None:

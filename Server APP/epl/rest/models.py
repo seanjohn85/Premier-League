@@ -64,7 +64,7 @@ class Player(models.Model):
 
         data = {
             'playerId'          : self.playerId,
-            'teams'             : self.teams,
+            'teams'             : self.teams.code,
             'f_name'            : self.f_name,
             'l_name'            : self.l_name,
             'pos'               : self.pos,
@@ -73,16 +73,16 @@ class Player(models.Model):
             'saves'             : self.saves,
             'clean_sheets'      : self.clean_sheets,
             'number'            : self.number,
-            'goals_conceded'    :self.goals_conceded,
+            'goals_conceded'    : self.goals_conceded,
             'own_goals'         : self.own_goals,
             'penalties_saved'   : self.penalties_saved,
             'photo'             : self.photo,
             'penalties_missed'  : self.penalties_missed,
             'yellow_cards'      : self.yellow_cards,
             'red_cards'         : self.red_cards,
-            'influence'         : self.influence,
-            'creativity'        : self.creativity,
-            'threat'            : self.threat,
+#            'influence'         : "" + self.influence,
+#            'creativity'        : "" +self.creativity,
+#            'threat'            : "" +self.threat,
             'news'              : self.news
             
         }
