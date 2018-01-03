@@ -155,6 +155,35 @@ def hello_world(request):
         if not name:
             return Response({"error": "No name passed"})
         return Response({"message": "Hello {}!".format(name)})
+    
+    
+@api_view(["GET", "POST"])
+def getData(request):
+    if request.method == "GET":
+        return Response({"error": "No prams!"})
+
+    else:
+        name = request.data.get("name")
+        if not name:
+            return Response({"error": "No team name passed"})
+        queryset = Team.objects.filter(name = name)
+        if not queryset:
+            return Response({"error": "Team Name Invalid"})
+        else:
+            club = {}
+            
+            for team in queryset:
+                club = team.json()
+                playersQuery = Player.objects.filter(teams = team)
+                players = []
+                qty = 0
+                for p in  playersQuery:
+                    players.append(p.json())
+                    qty = qty + 1
+                    
+                    
+                
+                return Response({"team": club, "players" : players, "qty": qty})
 
 
     

@@ -33,7 +33,7 @@ class Team(models.Model):
             
         }
         dump = json.dumps(data)
-        return dump
+        return data
 
     
     
@@ -87,4 +87,4 @@ class Player(models.Model):
             
         }
         dump = json.dumps(data)
-        return dump
+        return data

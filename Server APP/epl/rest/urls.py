@@ -15,6 +15,8 @@ from . import views
 
 urlpatterns = [
         url(r'^hello', views.hello_world, name="hello_world"),
+        url(r'^getData', views.getData, name="getData"),
+        
     # Examples:
     # url(r'^$', 'marine.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
