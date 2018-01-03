@@ -30,6 +30,7 @@ def index(request):
         str = ""
         for team in queryset:
             str = str + team.json()
+            
         return HttpResponse(str)
     
     
@@ -43,12 +44,14 @@ def squad(request):
         str = ""
         
         for team in teams:
-            str = str + team.json() + "<br><br>"
+            str = str + team.json()
             playersQuery = Player.objects.filter(teams = team)
             for p in playersQuery:
-                str = str + p.json()+ "<br><br>"
+                str = str + p.json()
 
-        return HttpResponse(str)
+    dump = json.dumps(str)
+    return HttpResponse(dump, content_type='application/json')
+
     
     
     
