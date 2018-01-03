@@ -26,7 +26,7 @@ SECRET_KEY = 'dgpv3zr$453zs@unv^=fabpu8i2v$ctfgf8jie5y0v1nqy+r77'
 DEBUG = True
 
 from socket import gethostname, gethostbyname 
-ALLOWED_HOSTS = [ gethostname(), gethostbyname(gethostname()), ] 
+ALLOWED_HOSTS = ["127.0.0.1", gethostname(), gethostbyname(gethostname()), ] 
 
 
 # Application definition

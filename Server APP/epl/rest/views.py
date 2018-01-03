@@ -52,6 +52,9 @@ def squad(request):
     dump = json.dumps(str)
     return HttpResponse(dump, content_type='application/json')
 
+
+
+
     
     
     
@@ -136,20 +139,24 @@ def create_UpdateDB(request):
             
 
 
-def testPage(request):
-    return render(request, base.html, context)
+
+ #iOS rest api
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 
-def teams(request):
-    return HttpResponse("Hello, world2. You're at the rest api test.")
+@api_view(["GET", "POST"])
+def hello_world(request):
+    if request.method == "GET":
+        return Response({"message": "Hello World!"})
 
-#from rest_framework import viewsets
-#from rest_framework import permissions
-#from .serializers import TeamSerializer
-#
-## Create your views here.
-class TeamViewSet():
-    print("here")
+    else:
+        name = request.data.get("name")
+        if not name:
+            return Response({"error": "No name passed"})
+        return Response({"message": "Hello {}!".format(name)})
+
+
     
     
 

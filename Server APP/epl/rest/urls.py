@@ -10,10 +10,11 @@ from django.conf.urls import url
 
 from . import views
 
-from rest_framework import routers
+#from rest_framework import routers
 
 
 urlpatterns = [
+        url(r'^hello', views.hello_world, name="hello_world"),
     # Examples:
     # url(r'^$', 'marine.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
