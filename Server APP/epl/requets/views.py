@@ -9,6 +9,10 @@ from django.http import HttpResponse
 
 import json
 
+def test(request):
+    return HttpResponse("This is a test")
+
+
 
 def index(request):
     data = {
@@ -20,5 +24,4 @@ def index(request):
     dump = json.dumps(data)
     return HttpResponse(dump, content_type='application/json')
 
-def index2(request):
-    return HttpResponse("This is a test")
+

@@ -84,7 +84,7 @@ classifier.add(Flatten())
 # full connection of layers
 
 #128 nodes
-classifier.add(Dense(units = 1500, activation = "relu"))
+classifier.add(Dense(units = 5000, activation = "relu"))
  #only 2 (sigmoid) other wise sofmax is needed 
 classifier.add(Dense(units = 20, activation = "softmax"))
 
@@ -92,7 +92,7 @@ classifier.add(Dense(units = 20, activation = "softmax"))
 #compiling the CNN
 
 #without binary outcome crossentropy is needed
-classifier.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+classifier.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 # adding images to cnn
 
@@ -122,8 +122,9 @@ validation_generator = test_datagen.flow_from_directory(
         batch_size=5,
         class_mode='categorical')
 
+
 classifier.fit_generator(train_generator,
-        steps_per_epoch=3847, epochs=100, validation_steps=20)
+        steps_per_epoch=3490, epochs=30, validation_steps=20, validation_data = validation_generator)
 
 
 
@@ -131,7 +132,7 @@ classifier.fit_generator(train_generator,
 
 import h5py
 
-classifier.save("model.h5")
+classifier.save("CNNmodel.h5")
 
 from Ipython.display import SVG
 from keras.utils.vis_utils import model_to_dot
@@ -148,13 +149,13 @@ plot_model(classifier, "graph.png")
 import coremltools
 
 output_labels = ["Arsenal", "Bournemouth", "Brighton", "Burnley", "Chelsea", "Crystal Palace", "Everton",
-                 "Huddersfield Town", "Liverpool", "Leicester City",  "Manchester City", "Manchester United", 
-                 "Newcastle United", "Southampton", "Tottenham Hotspur", "Stoke City", "Swansea City",  
-                 "Watford", "West Bromwich Albion", "West Ham United"]
+                 "Huddersfield", "Leicester", "Liverpool",  "Man City", "Man Utd", 
+                 "Newcastle", "Southampton", "Spurs", "Stoke", "Swansea",  
+                 "Watford", "West Brom", "West Ham"]
 
 scale = 1/255.
 
-coreml_gen = coremltools.converters.keras.convert("model.h5",
+coreml_gen = coremltools.converters.keras.convert("CNNmodel.h5",
                                                   input_names = 'image',
                                                   image_input_names='image',
                                                   class_labels =output_labels,
@@ -163,7 +164,7 @@ coreml_gen.author = "John Kenny"
 coreml_gen.license = 'MIT'
 coreml_gen.input_description['image'] = 'Image of a football crest'
 coreml_gen.output_description['output1'] = "Predicted team"
-coreml_gen.save("crestIdenifer.mlmodel")
+coreml_gen.save("crestIdeniferCNN.mlmodel")
 
 
 
