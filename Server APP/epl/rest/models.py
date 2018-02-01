@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.db import models
 import json
 
-# Create your models here.
+#Class used to create team objects and team table structure in db
 class Team(models.Model):
     code                    = models.IntegerField(primary_key=True,  unique=True)
     name                    = models.CharField(max_length=80)
@@ -18,7 +18,7 @@ class Team(models.Model):
     
     def returnMe(self):
         return self
-    
+    #used to return a json object containing a team
     def json(self):
 
         data = {
@@ -37,9 +37,10 @@ class Team(models.Model):
 
     
     
-    
+#Class used to create Player objects and player table structure in db
 class Player(models.Model):
     playerId            = models.IntegerField(primary_key=True, unique=True)
+    #each player has one team
     teams               = models.ForeignKey(Team, on_delete=models.CASCADE)
     f_name              = models.CharField(max_length=80)
     l_name              = models.CharField(max_length=80)
@@ -60,6 +61,7 @@ class Player(models.Model):
     creativity          = models.DecimalField(max_digits=9, decimal_places=2, default=0)
     threat              = models.DecimalField(max_digits=9, decimal_places=2, default=0)
     news                = models.CharField(max_length=500, blank=True, null=True)
+    #used to return a json player object
     def json(self):
 
         data = {
@@ -88,3 +90,30 @@ class Player(models.Model):
         }
         dump = json.dumps(data)
         return data
+
+
+#next fixture table
+class Fixture(models.Model):
+    #one to one relationship established with 2 teams for each fixture
+    homeTeam    = models.OneToOneField(Team, on_delete=models.CASCADE, related_name='homeTeam')
+    awayTeam    = models.OneToOneField(Team, on_delete=models.CASCADE, related_name='awayTeam')
+    homeGoals   = models.IntegerField(default=0)
+    awayGoals   = models.IntegerField(default=0)
+    date        = models.CharField(max_length=100)
+    #returns the fixure data in json format
+    def json(self):
+        data = {
+             'homeTeam'          : self.homeTeam,
+              'awayTeam'          : self.awayTeam,
+              'homeGoals'         : self.homeGoals,
+              'awayGoals'         : self.awayGoals,
+              'date'              : date.pos,
+          
+          }
+        dump = json.dumps(data)
+        return data
+
+
+
+
+

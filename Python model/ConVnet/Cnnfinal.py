@@ -88,11 +88,15 @@ classifier.add(Dense(units = 5000, activation = "relu"))
  #only 2 (sigmoid) other wise sofmax is needed 
 classifier.add(Dense(units = 20, activation = "softmax"))
 
+from keras.optimizers import Optimizer
+
+
+optimizer = keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-8)
 
 #compiling the CNN
 
 #without binary outcome crossentropy is needed
-classifier.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+classifier.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
 # adding images to cnn
 
@@ -124,7 +128,7 @@ validation_generator = test_datagen.flow_from_directory(
 
 
 classifier.fit_generator(train_generator,
-        steps_per_epoch=3490, epochs=30, validation_steps=20, validation_data = validation_generator)
+        steps_per_epoch=4000, epochs=30, validation_steps=20, validation_data = validation_generator)
 
 
 
@@ -132,7 +136,7 @@ classifier.fit_generator(train_generator,
 
 import h5py
 
-classifier.save("CNNmodel.h5")
+classifier.save("CNNmodel2.h5")
 
 from Ipython.display import SVG
 from keras.utils.vis_utils import model_to_dot
@@ -155,7 +159,7 @@ output_labels = ["Arsenal", "Bournemouth", "Brighton", "Burnley", "Chelsea", "Cr
 
 scale = 1/255.
 
-coreml_gen = coremltools.converters.keras.convert("CNNmodel.h5",
+coreml_gen = coremltools.converters.keras.convert("CNNmodel2.h5",
                                                   input_names = 'image',
                                                   image_input_names='image',
                                                   class_labels =output_labels,
@@ -164,7 +168,7 @@ coreml_gen.author = "John Kenny"
 coreml_gen.license = 'MIT'
 coreml_gen.input_description['image'] = 'Image of a football crest'
 coreml_gen.output_description['output1'] = "Predicted team"
-coreml_gen.save("crestIdeniferCNN.mlmodel")
+coreml_gen.save("crestIdeniferCNN2.mlmodel")
 
 
 

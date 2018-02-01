@@ -66,6 +66,8 @@ def create_UpdateDB(request):
     hres = urllib.urlopen('https://fantasy.premierleague.com/drf/bootstrap-static')
     #reads the json from the url
     data = json.loads(hres.read().decode("utf-8"))
+    #deletes previous fixtures
+    #Fixture.objects.all().delete()
     #loops through all teams crating or updating the database
     for team in data['teams']:
         print(team['code'])
@@ -134,6 +136,18 @@ def create_UpdateDB(request):
                                       news = player["news"]
                         )
 
+# =============================================================================
+#     for fixture in data['next_event_fixtures']:
+#         print("fix")
+#         
+#         #find the home team
+#         homeqs = Team.objects.filter(code = fixture["team_a"])
+#         
+#         awayqs = Team.objects.filter(code = fixture["team_h"])
+#         
+# 
+#         Team.objects.create(homeTeam = homeTeam, awayTeam = awayTeam, date = fixture["kickoff_time_formatted"])
+# =============================================================================
 
     return HttpResponse("complete")
             
