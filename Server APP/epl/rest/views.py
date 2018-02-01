@@ -10,6 +10,8 @@ from django.views import View
 #class object repersenting db tables
 from .models import Team
 from .models import Player
+from .models import Fixture
+
 
 
 #used for json handling
@@ -67,9 +69,10 @@ def create_UpdateDB(request):
     #reads the json from the url
     data = json.loads(hres.read().decode("utf-8"))
     #deletes previous fixtures
-    #Fixture.objects.all().delete()
+    Fixture.objects.all().delete()
     #loops through all teams crating or updating the database
     for team in data['teams']:
+        print(team['id'])
         print(team['code'])
         print(team['name'])
         print(team['strength_defence_home'])
@@ -80,7 +83,7 @@ def create_UpdateDB(request):
         print(team['strength_overall_away'])
         queryset = Team.objects.filter(code = team['code'])
         if not queryset:
-            Team.objects.create(code = team['code'], name = team['name'], 
+            Team.objects.create(code = team['code'], name = team['name'], fixId = team['id'],
                                 strength_defence_home = team['strength_defence_home'],
                                 strength_attack_home = team['strength_attack_home'],
                                 strength_overall_home = team['strength_overall_home'],
@@ -88,7 +91,7 @@ def create_UpdateDB(request):
                                 strength_defence_away = team['strength_defence_away'],
                                 strength_overall_away = team['strength_overall_away'])
         else:
-            queryset.update(strength_defence_home = team['strength_defence_home'],
+            queryset.update(fixId = team['id'], strength_defence_home = team['strength_defence_home'],
                             strength_attack_home = team['strength_attack_home'],
                             strength_overall_home = team['strength_overall_home'],
                             strength_attack_away =team['strength_attack_away'],
@@ -136,18 +139,26 @@ def create_UpdateDB(request):
                                       news = player["news"]
                         )
 
-# =============================================================================
-#     for fixture in data['next_event_fixtures']:
-#         print("fix")
-#         
-#         #find the home team
-#         homeqs = Team.objects.filter(code = fixture["team_a"])
-#         
-#         awayqs = Team.objects.filter(code = fixture["team_h"])
-#         
-# 
-#         Team.objects.create(homeTeam = homeTeam, awayTeam = awayTeam, date = fixture["kickoff_time_formatted"])
-# =============================================================================
+    
+    for fixture in data['next_event_fixtures']:
+        
+        print(fixture["team_a"])
+        print(fixture["team_h"])
+         #find the home team
+        homeqs = Team.objects.filter(fixId = fixture["team_h"])
+    
+        for h in homeqs:
+            home= h
+            print(home.name)
+         #find the away team
+        awayqs = Team.objects.filter(fixId = fixture["team_a"])
+        for a in awayqs:
+            away = a
+            print(away.name)
+         
+        #create fiture object
+        Fixture.objects.create(homeTeam = home, awayTeam = away, date = fixture["kickoff_time_formatted"])
+
 
     return HttpResponse("complete")
             
@@ -158,7 +169,7 @@ def create_UpdateDB(request):
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-
+#test rest api call
 @api_view(["GET", "POST"])
 def hello_world(request):
     if request.method == "GET":
@@ -170,14 +181,16 @@ def hello_world(request):
             return Response({"error": "No name passed"})
         return Response({"message": "Hello {}!".format(name)})
     
-    
+#ios request used to get a teams data    
 @api_view(["GET", "POST"])
 def getData(request):
+    #ensures the method is a post
     if request.method == "GET":
         return Response({"error": "No prams!"})
-
+   #find the pram name 
     else:
         name = request.data.get("name")
+        #if no name return an error message
         if not name:
             return Response({"error": "No team name passed"})
         queryset = Team.objects.filter(name = name)
@@ -185,19 +198,21 @@ def getData(request):
             return Response({"error": "Team Name Invalid"})
         else:
             club = {}
-            
+            fixture = {}
             for team in queryset:
                 club = team.json()
                 playersQuery = Player.objects.filter(teams = team)
+                fix1 = Fixture.objects.filter(homeTeam = team) | Fixture.objects.filter(awayTeam = team)
+                for f in fix1:
+                    fixture = f.json()
+                    print(f.json())
                 players = []
                 qty = 0
                 for p in  playersQuery:
                     players.append(p.json())
                     qty = qty + 1
                     
-                    
-                
-                return Response({"team": club, "players" : players, "qty": qty})
+                return Response({"team": club, "players" : players, "qty": qty, "fixture" : fixture})
 
 
     

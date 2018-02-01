@@ -8,6 +8,7 @@ import json
 class Team(models.Model):
     code                    = models.IntegerField(primary_key=True,  unique=True)
     name                    = models.CharField(max_length=80)
+    fixId                   = models.IntegerField(default=0)
     strength_defence_home   = models.IntegerField(default=0)
     strength_attack_home    = models.IntegerField(default=0)
     strength_overall_home   = models.IntegerField(default=0)
@@ -95,19 +96,19 @@ class Player(models.Model):
 #next fixture table
 class Fixture(models.Model):
     #one to one relationship established with 2 teams for each fixture
-    homeTeam    = models.OneToOneField(Team, on_delete=models.CASCADE, related_name='homeTeam')
-    awayTeam    = models.OneToOneField(Team, on_delete=models.CASCADE, related_name='awayTeam')
+    homeTeam    = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='homeTeam')
+    awayTeam    = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='awayTeam')
     homeGoals   = models.IntegerField(default=0)
     awayGoals   = models.IntegerField(default=0)
     date        = models.CharField(max_length=100)
     #returns the fixure data in json format
     def json(self):
         data = {
-             'homeTeam'          : self.homeTeam,
-              'awayTeam'          : self.awayTeam,
+             'homeTeam'           : self.homeTeam.name,
+              'awayTeam'          : self.awayTeam.name,
               'homeGoals'         : self.homeGoals,
               'awayGoals'         : self.awayGoals,
-              'date'              : date.pos,
+              'date'              : self.date,
           
           }
         dump = json.dumps(data)
