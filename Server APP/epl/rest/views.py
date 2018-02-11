@@ -158,8 +158,26 @@ def create_UpdateDB(request):
          
         #create fiture object
         Fixture.objects.create(homeTeam = home, awayTeam = away, date = fixture["kickoff_time_formatted"])
-
-
+    
+    
+    
+    teams = Team.objects.all()
+    maxDef = 0
+    minDef = 0
+    maxAtt = 0
+    for t in teams:
+        
+        for t2 in teams:
+            if t2.name != t.name:
+               if t.strength_defence_home - t2.strength_attack_away > maxDef:
+                   maxDef = t.strength_defence_home - t2.strength_attack_away
+                   
+               if t.strength_attack_home - t2.strength_defence_away > maxAtt:
+                   maxAtt = t.strength_attack_home - t2.strength_defence_away
+                   
+                
+    print(maxDef)
+    print(maxAtt)
     return HttpResponse("complete")
             
 
