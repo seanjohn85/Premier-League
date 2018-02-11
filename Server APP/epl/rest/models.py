@@ -104,15 +104,41 @@ class Fixture(models.Model):
     #returns the fixure data in json format
     def json(self):
         data = {
-             'homeTeam'           : self.homeTeam.name,
+              'homeTeam'          : self.homeTeam.name,
               'awayTeam'          : self.awayTeam.name,
               'homeGoals'         : self.homeGoals,
               'awayGoals'         : self.awayGoals,
               'date'              : self.date,
+          }
+        dump = json.dumps(data)
+        return data
+    
+    
+#next league table db table
+class Table(models.Model):
+    team        = models.CharField(max_length=80)
+    played      = models.IntegerField(default=0)
+    win         = models.IntegerField(default=0)
+    draw        = models.IntegerField(default=0)
+    loss        = models.IntegerField(default=0)
+    gd          = models.IntegerField(default=0)
+    points      = models.IntegerField(default=0)
+    
+    #returns the league table row data in json format
+    def json(self):
+        data = {
+              'team'              : self.team,
+              'played'            : self.played,
+              'win'               : self.win,
+              'draw'              : self.draw,
+              'loss'              : self.loss,
+              'gd'                : self.gd,
+              'points'            : self.points
           
           }
         dump = json.dumps(data)
         return data
+
 
 
 
