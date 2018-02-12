@@ -178,10 +178,14 @@ def create_UpdateDB(request):
             print(away.name)
             
             away.strength_defence_away
-            
-        #create fiture object
-        Fixture.objects.create(homeTeam = home, pd.goalGenerator(home.strength_attack_home - away.strength_defence_away), pd.goalGenerator(away.strength_attack_away - home.strength_defence_home), awayTeam = away, date = fixture["kickoff_time_formatted"])
         
+        hg = pd.goalGenerator(home.strength_attack_home - away.strength_defence_away)
+        ag = pd.goalGenerator(away.strength_attack_away - home.strength_defence_home)
+        #create fiture object
+        Fixture.objects.create(homeTeam = home, awayTeam = away,homeGoals = hg, awayGoals = ag, date = fixture["kickoff_time_formatted"])
+        
+    
+    
     
     
     return HttpResponse("complete")
@@ -278,22 +282,9 @@ class Predictor(object):
     def goalGenerator(self, compare):
         import numpy
         goals = numpy.random.poisson(self.getExpectedGoals(compare))
-        print("x is ", x)
+        print("x is ", goals)
         return goals
-# =============================================================================
-#         import math
-#         import random
-#         expectedGoals = -self.getExpectedGoals(compare)
-#         goals = 0
-#         limit = math.exp(expectedGoals)
-#         ranNo = random.uniform(1, 10)
-#         while ranNo > limit:
-#             goals +=1
-#             ranNo *= random.uniform(1, 10)
-#             
-#         print(goals)
-#         return goals
-# =============================================================================
+
         
         
         
