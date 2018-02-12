@@ -126,7 +126,6 @@ def create_UpdateDB(request):
             #store the team
             for t in qs:
                 team =  t
-                print("team found")
             #search bd to see if player already stored
             queryset = Player.objects.filter(playerId = player["id"])
             no = player["squad_number"]

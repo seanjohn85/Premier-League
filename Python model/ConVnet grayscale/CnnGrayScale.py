@@ -90,8 +90,9 @@ classifier.add(Dense(units = 20, activation = "softmax"))
 
 import keras
 
+lrn = 1e-3
 #set the optimizer to use 
-optimizer = keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-8)
+optimizer = keras.optimizers.Adam(lr=lrn, decay = lrn/5)
 
 #compiling the CNN
 
@@ -139,7 +140,7 @@ classifier.fit_generator(train_generator,
 
 import h5py
 
-classifier.save("CNNmodelGrayScale.h5")
+classifier.save("CNNmodelGrayScale2.h5")
 
 
 #plot graph using model
@@ -158,7 +159,7 @@ output_labels = ["Arsenal", "Bournemouth", "Brighton", "Burnley", "Chelsea", "Cr
 
 scale = 1/255.
 
-coreml_gen = coremltools.converters.keras.convert("CNNmodelGrayScale.h5",
+coreml_gen = coremltools.converters.keras.convert("CNNmodelGrayScale2.h5",
                                                   input_names = 'image',
                                                   image_input_names='image',
                                                   class_labels =output_labels,
@@ -167,7 +168,7 @@ coreml_gen.author = "John Kenny"
 coreml_gen.license = 'MIT'
 coreml_gen.input_description['image'] = 'GrayScale Image of a football crest'
 coreml_gen.output_description['output1'] = "Predicted team"
-coreml_gen.save("CrestIdeniferCNNGrayScale.mlmodel")
+coreml_gen.save("CrestIdeniferCNNGrayScale2.mlmodel")
 
 
 
