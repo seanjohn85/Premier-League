@@ -11,6 +11,7 @@ from django.views import View
 from .models import Team
 from .models import Player
 from .models import Fixture
+from .models import Table
 
 
 
@@ -56,13 +57,31 @@ def squad(request):
 
 
 
+#function to set the league table from the api - key limited to 25 trys per month
+def getTable():
+   #clear the previous state of the table in db
+   Table.objects.all().delete()
+   #request data from server
+   import urllib2
+   req = urllib2.Request("https://heisenbug-premier-league-live-scores-v1.p.mashape.com/api/premierleague/table?from=1", None, {"X-Mashape-Key": "cZbPUOwquimshoLXosqhuUAvn6lPp1QGfXTjsnHCziLoaVjfdI","Accept": "application/json"})
+   response = urllib2.urlopen(req)
+   #convert data to readable json
+   data = json.loads(response.read().decode("utf-8"))
+   #loop trough the records which is each teams table position
+   for row in data['records']:
+       gd = row['goalsFor'] - row['goalsAgainst']
+       Table.objects.create(team  = row['team'],
+           played      = row['played'],
+           win         = row['win'],
+           draw        = row['draw'],
+           loss        = row['loss'],
+           gd          = gd,
+           points      = row['points'])
 
-    
-    
-    
     
 #method to update palyer and team opjects on the db. this is currently called by a url but will be moved to a timed interval
 def create_UpdateDB(request):
+    #getTable()
     #opens the url
     #api to get all data from fantasy football in json
     hres = urllib.urlopen('https://fantasy.premierleague.com/drf/bootstrap-static')
@@ -139,7 +158,7 @@ def create_UpdateDB(request):
                                       news = player["news"]
                         )
 
-    
+    pd = Predictor()
     for fixture in data['next_event_fixtures']:
         
         print(fixture["team_a"])
@@ -150,36 +169,25 @@ def create_UpdateDB(request):
         for h in homeqs:
             home= h
             print(home.name)
+            
+            
          #find the away team
         awayqs = Team.objects.filter(fixId = fixture["team_a"])
         for a in awayqs:
             away = a
             print(away.name)
-         
-        #create fiture object
-        Fixture.objects.create(homeTeam = home, awayTeam = away, date = fixture["kickoff_time_formatted"])
-    
-    
-    
-    teams = Team.objects.all()
-    maxDef = 0
-    minDef = 0
-    maxAtt = 0
-    for t in teams:
-        
-        for t2 in teams:
-            if t2.name != t.name:
-               if t.strength_defence_home - t2.strength_attack_away > maxDef:
-                   maxDef = t.strength_defence_home - t2.strength_attack_away
-                   
-               if t.strength_attack_home - t2.strength_defence_away > maxAtt:
-                   maxAtt = t.strength_attack_home - t2.strength_defence_away
-                   
-                
-    print(maxDef)
-    print(maxAtt)
-    return HttpResponse("complete")
             
+            away.strength_defence_away
+            
+        #create fiture object
+        Fixture.objects.create(homeTeam = home, pd.goalGenerator(home.strength_attack_home - away.strength_defence_away), pd.goalGenerator(away.strength_attack_away - home.strength_defence_home), awayTeam = away, date = fixture["kickoff_time_formatted"])
+        
+    
+    
+    return HttpResponse("complete")
+
+
+
 
 
 
@@ -217,6 +225,8 @@ def getData(request):
         else:
             club = {}
             fixture = {}
+            table = []
+            #tableQuery = 
             for team in queryset:
                 club = team.json()
                 playersQuery = Player.objects.filter(teams = team)
@@ -233,10 +243,60 @@ def getData(request):
                 return Response({"team": club, "players" : players, "qty": qty, "fixture" : fixture})
 
 
+#used to create match predictions
+class Predictor(object):
+    
+    def __init__(self):
+        teams = Team.objects.all()
+        self.maxAtt = 0
+        self.minAtt = 0
+        self.minGoals = 0.32
+        self.maxGoals = 2.65
+        for t in teams:
+        
+            for t2 in teams:
+                #check if the teams are the same team and skip if so
+                if t2.name != t.name:
+                   
+                    if t.strength_attack_home - t2.strength_defence_away > self.maxAtt:
+                        self.maxAtt = t.strength_attack_home - t2.strength_defence_away
+                    elif t.strength_attack_home - t2.strength_defence_away < self.minAtt: 
+                        self.minAtt = t.strength_attack_home - t2.strength_defence_away
+                   
+                    if t2.strength_attack_away - t.strength_defence_home > self.maxAtt:
+                       self. maxAtt = t2.strength_attack_away - t.strength_defence_home
+                    elif t2.strength_attack_away - t.strength_defence_home < self.minAtt: 
+                         self.minAtt = t2.strength_attack_away - t.strength_defence_home
+        print(self.minAtt)
+        print(self.maxAtt)
     
     
-
-
+    def getExpectedGoals(self, compare):
+        print(self.minGoals + (self.maxGoals - self.minGoals) * (compare - self.minAtt) / (self.maxAtt - self.minAtt))
+        return self.minGoals + (self.maxGoals - self.minGoals) * (compare - self.minAtt) / (self.maxAtt - self.minAtt)
+    
+    def goalGenerator(self, compare):
+        import numpy
+        goals = numpy.random.poisson(self.getExpectedGoals(compare))
+        print("x is ", x)
+        return goals
+# =============================================================================
+#         import math
+#         import random
+#         expectedGoals = -self.getExpectedGoals(compare)
+#         goals = 0
+#         limit = math.exp(expectedGoals)
+#         ranNo = random.uniform(1, 10)
+#         while ranNo > limit:
+#             goals +=1
+#             ranNo *= random.uniform(1, 10)
+#             
+#         print(goals)
+#         return goals
+# =============================================================================
+        
+        
+        
 
 
 
