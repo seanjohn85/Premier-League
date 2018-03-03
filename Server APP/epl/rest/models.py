@@ -19,6 +19,9 @@ class Team(models.Model):
     
     def returnMe(self):
         return self
+    
+    def myName(self):
+        return self.name
     #used to return a json object containing a team
     def json(self):
 
