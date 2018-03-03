@@ -23,7 +23,6 @@ import json
 import urllib
 
 
-
 # for testing teams
 def index(request):
     queryset = Team.objects.filter(code = 8888888)
@@ -57,31 +56,9 @@ def squad(request):
     return HttpResponse(dump, content_type='application/json')
 
 
-
-#function to set the league table from the api - key limited to 25 trys per month
-def getTable():
-   #clear the previous state of the table in db
-   Table.objects.all().delete()
-   #request data from server
-   import urllib2
-   req = urllib2.Request("https://heisenbug-premier-league-live-scores-v1.p.mashape.com/api/premierleague/table?from=1", None, {"X-Mashape-Key": "cZbPUOwquimshoLXosqhuUAvn6lPp1QGfXTjsnHCziLoaVjfdI","Accept": "application/json"})
-   response = urllib2.urlopen(req)
-   #convert data to readable json
-   data = json.loads(response.read().decode("utf-8"))
-   #loop trough the records which is each teams table position
-   for row in data['records']:
-       gd = row['goalsFor'] - row['goalsAgainst']
-       Table.objects.create(team  = row['team'],
-           played      = row['played'],
-           win         = row['win'],
-           draw        = row['draw'],
-           loss        = row['loss'],
-           gd          = gd,
-           points      = row['points'])
-
-    
 #method to update palyer and team opjects on the db. this is currently called by a url but will be moved to a timed interval
 def create_UpdateDB(request):
+
     #this object downloads info from the net on players ans teams please view its class for more infor
     from GetData import GetData
     #the constructor downloads the json data from the pl api
@@ -92,17 +69,10 @@ def create_UpdateDB(request):
     update.getPlayers()
     #changes to the next round of fixtures and makes a prediction(see the prediction class)
     update.getFixtures()
-# =============================================================================
-     
-#     update.getTable()
-#     update.getTeams()
-#     update.getPlayers()
-# =============================================================================
-    
+    #update table
+    update.getTableSky()
+
     return HttpResponse("updated data")
-
-
-
 
 
 

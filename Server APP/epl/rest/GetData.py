@@ -23,25 +23,24 @@ import urllib
 class GetData(object):
     def __init__(self):
       
-        
-       
-        #clear the previous state of the table in db
-        Table.objects.all().delete()
-        
-        #call to set the league table from the api - key limited to 25 trys per month
-#        self.req = urllib2.Request("https://heisenbug-premier-league-live-scores-v1.p.mashape.com/api/premierleague/table?from=1", None, {"X-Mashape-Key": "cZbPUOwquimshoLXosqhuUAvn6lPp1QGfXTjsnHCziLoaVjfdI","Accept": "application/json"})
-#        self.response = urllib2.urlopen(self.req)
-#        self.tableData = json.loads(self.response.read().decode("utf-8"))
         #api to get all data from fantasy football in json
         self.hres = urllib.urlopen('https://fantasy.premierleague.com/drf/bootstrap-static')
         #reads the json from the url
         self.data = json.loads(self.hres.read().decode("utf-8"))
         
         
-    #function to get the league table and update the db   
+    #function to get the league table and update the db   no longer used
     def getTable(self):
+        #clear the previous state of the table in db
+        Table.objects.all().delete()
+        #request data from server
+        import urllib2
+        req = urllib2.Request("https://heisenbug-premier-league-live-scores-v1.p.mashape.com/api/premierleague/table", None, {"X-Mashape-Key": "Jqt3JPn10XmshB7WnEfMWs8KWKvZp1DeV2fjsnT9J7lJSXS0aw","Accept": "application/json"})
+        response = urllib2.urlopen(req)
+        #convert data to readable json
+        data = json.loads(response.read().decode("utf-8"))
         #loop trough the records which is each teams table position
-        for row in self.tableData['records']:
+        for row in data['records']:
             gd = row['goalsFor'] - row['goalsAgainst']
             Table.objects.create(team  = row['team'],
             played      = row['played'],
@@ -161,6 +160,52 @@ class GetData(object):
             ag = pd.goalGenerator(away.strength_attack_away - home.strength_defence_home)
             #create fiture object
             Fixture.objects.create(homeTeam = home, awayTeam = away,homeGoals = hg, awayGoals = ag, date = fixture["kickoff_time_formatted"])
+    
+    #populates the league table using data from sky sports        
+    def getTableSky(self):
+         #clear the previous state of the table in db
+        Table.objects.all().delete()
+        from bs4 import BeautifulSoup
+        import requests
+        #link on skys website
+        sky  = requests.get("http://www.skysports.com/premier-league-table")
+        #converts the hml to text
+        skyData = sky.text
+        #feeds the downloaded data into beautiful soup library
+        soup = BeautifulSoup(skyData, "html5lib")
+        #gets all the rows of the league table fromthe html
+        table=soup.findAll("tr" ,{"class":"standing-table__row"})
+        #loops thgrough the rows 
+        for row in table:
+            #skip the header row
+            data = row.find_all("th")
+            if data:
+                print("nonw")
+            else:
+                print("here")
         
+                #team name
+                print(row.select_one("td a:nth-of-type(1)").text)
+                #played
+                print(row.select_one("td:nth-of-type(3)").text)
+                #won
+                print(row.select_one("td:nth-of-type(4)").text)
+                #drew
+                print(row.select_one("td:nth-of-type(5)").text)
+                #lost
+                print(row.select_one("td:nth-of-type(6)").text)
+                #gd
+                print(row.select_one("td:nth-of-type(9)").text)
+                #gd
+                print(row.select_one("td:nth-of-type(10)").text)
+                #create table object and update db
+                Table.objects.create(team  = row.select_one("td a:nth-of-type(1)").text,
+                   played      = row.select_one("td:nth-of-type(3)").text,
+                   win         = row.select_one("td:nth-of-type(4)").text,
+                   draw        = row.select_one("td:nth-of-type(5)").text,
+                   loss        = row.select_one("td:nth-of-type(6)").text,
+                   gd          = row.select_one("td:nth-of-type(9)").text,
+                   points      = row.select_one("td:nth-of-type(10)").text)
+    
 
 
