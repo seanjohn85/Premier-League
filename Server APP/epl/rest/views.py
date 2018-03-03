@@ -241,8 +241,13 @@ def getData(request):
                 for p in  playersQuery:
                     players.append(p.json())
                     qty = qty + 1
+                #gets league table data
+                tableQy = Table.objects.all()
+                for row in tableQy:
+                    print ("row")
+                    table.append(row.json())
                     
-                return Response({"team": club, "players" : players, "qty": qty, "fixture" : fixture})
+            return Response({"team": club, "players" : players, "qty": qty, "fixture" : fixture, "table" :table})
 
 
 
