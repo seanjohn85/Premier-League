@@ -6,6 +6,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.http import HttpResponse
 from django.views import View
+import urllib2
 
 #class object repersenting db tables
 from .models import Team
@@ -81,112 +82,24 @@ def getTable():
     
 #method to update palyer and team opjects on the db. this is currently called by a url but will be moved to a timed interval
 def create_UpdateDB(request):
-    #getTable()
-    #opens the url
-    #api to get all data from fantasy football in json
-    hres = urllib.urlopen('https://fantasy.premierleague.com/drf/bootstrap-static')
-    #reads the json from the url
-    data = json.loads(hres.read().decode("utf-8"))
-    #deletes previous fixtures
-    Fixture.objects.all().delete()
-    #loops through all teams crating or updating the database
-    for team in data['teams']:
-        print(team['id'])
-        print(team['code'])
-        print(team['name'])
-        print(team['strength_defence_home'])
-        print(team['strength_attack_home'])
-        print(team['strength_overall_home'])
-        print(team['strength_attack_away'])
-        print(team['strength_defence_away'])
-        print(team['strength_overall_away'])
-        queryset = Team.objects.filter(code = team['code'])
-        if not queryset:
-            Team.objects.create(code = team['code'], name = team['name'], fixId = team['id'],
-                                strength_defence_home = team['strength_defence_home'],
-                                strength_attack_home = team['strength_attack_home'],
-                                strength_overall_home = team['strength_overall_home'],
-                                strength_attack_away =team['strength_attack_away'],
-                                strength_defence_away = team['strength_defence_away'],
-                                strength_overall_away = team['strength_overall_away'])
-        else:
-            queryset.update(fixId = team['id'], strength_defence_home = team['strength_defence_home'],
-                            strength_attack_home = team['strength_attack_home'],
-                            strength_overall_home = team['strength_overall_home'],
-                            strength_attack_away =team['strength_attack_away'],
-                            strength_defence_away = team['strength_defence_away'],
-                            strength_overall_away = team['strength_overall_away'])
-            
-    #loop through all the players from json file      
-    for player in data['elements']:
-        #find the players team
-        qs = Team.objects.filter(code = player["team_code"])
-        #ensure only one team is returned
-        if qs.count() == 1:
-            #store the team
-            for t in qs:
-                team =  t
-            #search bd to see if player already stored
-            queryset = Player.objects.filter(playerId = player["id"])
-            no = player["squad_number"]
-            if no is None:
-                no = 0
-            if not queryset:
-                Player.objects.create(playerId = player["id"], teams = team,
-                                      f_name = player["first_name"], l_name =player["second_name"],
-                                      pos = player["element_type"], goals = player["goals_scored"],
-                                      assits = player["assists"], saves = player["saves"], 
-                                      clean_sheets = player["clean_sheets"], number = no,
-                                      goals_conceded = player["goals_conceded"], own_goals = player["own_goals"],
-                                      penalties_saved = player["penalties_saved"], photo = player["photo"].replace(".jpg", ""),
-                                      penalties_missed = player["penalties_missed"], yellow_cards = player["yellow_cards"],
-                                      red_cards = player["red_cards"], influence = player["influence"],
-                                      creativity = player["creativity"], threat = player["threat"],
-                                      news = player["news"]
-                        )
-            else:
-                queryset.update(teams = team,
-                                      pos = player["element_type"], goals = player["goals_scored"],
-                                      assits = player["assists"], saves = player["saves"], 
-                                      clean_sheets = player["clean_sheets"], number = no,
-                                      goals_conceded = player["goals_conceded"], own_goals = player["own_goals"],
-                                      penalties_saved = player["penalties_saved"],
-                                      penalties_missed = player["penalties_missed"], yellow_cards = player["yellow_cards"],
-                                      red_cards = player["red_cards"], influence = player["influence"],
-                                      creativity = player["creativity"], threat = player["threat"],
-                                      news = player["news"]
-                        )
-    #import the prediction class            
-    from Prediction import Predictor
-    #create a predictor object
-    pd = Predictor()
-    #loop trhough all the fixtures
-    for fixture in data['next_event_fixtures']:
-        
-        print(fixture["team_a"])
-        print(fixture["team_h"])
-        #find the home team
-        homeqs = Team.objects.filter(fixId = fixture["team_h"])
+    #this object downloads info from the net on players ans teams please view its class for more infor
+    from GetData import GetData
+    #the constructor downloads the json data from the pl api
+    update = GetData()
+    #updates all the teams data
+    update.getTeams()
+    #updates all the player date in db using the json 
+    update.getPlayers()
+    #changes to the next round of fixtures and makes a prediction(see the prediction class)
+    update.getFixtures()
+# =============================================================================
+     
+#     update.getTable()
+#     update.getTeams()
+#     update.getPlayers()
+# =============================================================================
     
-        for h in homeqs:
-            home= h
-            print(home.name)
-            
-         #find the away team
-        awayqs = Team.objects.filter(fixId = fixture["team_a"])
-        for a in awayqs:
-            away = a
-            print(away.name)
-            
-            away.strength_defence_away
-        #uses the predictor class to generate goals for each side
-        hg = pd.goalGenerator(home.strength_attack_home - away.strength_defence_away)
-        ag = pd.goalGenerator(away.strength_attack_away - home.strength_defence_home)
-        #create fiture object
-        Fixture.objects.create(homeTeam = home, awayTeam = away,homeGoals = hg, awayGoals = ag, date = fixture["kickoff_time_formatted"])
-        
-    
-    return HttpResponse("complete")
+    return HttpResponse("updated data")
 
 
 

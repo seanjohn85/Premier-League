@@ -7,31 +7,31 @@ Created on Sat Mar  3 15:08:26 2018
 """
 
 from django.http import HttpResponse
-
 #class object repersenting db tables
 from .models import Team
 from .models import Player
 from .models import Fixture
 from .models import Table
 
-#used for json handling
+ #used for json handling
 import json
-
+        
 #extracting from web sources
 import urllib
-
-import urllib2
 
 #class used to get data from the server
 class GetData(object):
     def __init__(self):
+      
+        
+       
         #clear the previous state of the table in db
         Table.objects.all().delete()
         
         #call to set the league table from the api - key limited to 25 trys per month
-        self.req = urllib2.Request("https://heisenbug-premier-league-live-scores-v1.p.mashape.com/api/premierleague/table?from=1", None, {"X-Mashape-Key": "cZbPUOwquimshoLXosqhuUAvn6lPp1QGfXTjsnHCziLoaVjfdI","Accept": "application/json"})
-        self.response = urllib2.urlopen(self.req)
-        self.tableData = json.loads(self.response.read().decode("utf-8"))
+#        self.req = urllib2.Request("https://heisenbug-premier-league-live-scores-v1.p.mashape.com/api/premierleague/table?from=1", None, {"X-Mashape-Key": "cZbPUOwquimshoLXosqhuUAvn6lPp1QGfXTjsnHCziLoaVjfdI","Accept": "application/json"})
+#        self.response = urllib2.urlopen(self.req)
+#        self.tableData = json.loads(self.response.read().decode("utf-8"))
         #api to get all data from fantasy football in json
         self.hres = urllib.urlopen('https://fantasy.premierleague.com/drf/bootstrap-static')
         #reads the json from the url
@@ -130,7 +130,7 @@ class GetData(object):
                                           creativity = player["creativity"], threat = player["threat"],
                                           news = player["news"]
                             )
-    
+    #function that deletes previous round of fixtures from the db and updates with the next round of fixtures and their predictions
     def getFixtures(self):
       #deletes previous fixtures
       Fixture.objects.all().delete()  
