@@ -40,11 +40,11 @@ class Predictor(object):
     
     
     def getExpectedGoals(self, compare):
-        print(self.minGoals + (self.maxGoals - self.minGoals) * (compare - self.minAtt) / (self.maxAtt - self.minAtt))
+        #print(self.minGoals + (self.maxGoals - self.minGoals) * (compare - self.minAtt) / (self.maxAtt - self.minAtt))
         return self.minGoals + (self.maxGoals - self.minGoals) * (compare - self.minAtt) / (self.maxAtt - self.minAtt)
     
     def goalGenerator(self, compare):
         import numpy
         goals = numpy.random.poisson(self.getExpectedGoals(compare))
-        print("x is ", goals)
+        #print("x is ", goals)
         return goals
