@@ -32,6 +32,8 @@ ALLOWED_HOSTS = ["127.0.0.1", "192.168.0.158", gethostname(), gethostbyname(geth
 # Application definition
 
 INSTALLED_APPS = [
+    'kombu.transport.django',
+    'djcelery',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,7 +44,15 @@ INSTALLED_APPS = [
     #'footballdata',
     'rest',
     'rest_framework'
+                  
 ]
+
+
+
+
+import djcelery
+djcelery.setup_loader()
+BROKER_URL = "django://" # tell kombu to use the Django database as the message queue
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
