@@ -10,13 +10,13 @@ Django server app providing RestFul service to the ios app on https://github.com
 The Django app scraps the internet and uses a premier league api to garther inforamtion on the efl football teams and stores it in an sqllite db. It also makes predictions on the teams next fixture using a Lamba fuction with Poisson Distribution algorithm(https://en.wikipedia.org/wiki/Poisson_distribution)
 
 
-##
+## Pyton 2.7
 
 Everthing is developed in Python 2.7 and it is recommended that a new virtual enviroment is set up for each fold using a system such as Anaconda.
 
 All intructions are based on pip install.
 
-#Keras Cnn set Up
+# Keras Cnn set Up
 
 open a terminal in a new python 2.7 enviroment and enter the following commands
 
