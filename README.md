@@ -28,6 +28,7 @@ pip install -U scikit-learn
 pip install pillow
 pip install h5py
 pip install matplotlib
+pip install numpy
 
 **** it is important the version numbers are correct as they are required for coreml 
 
@@ -60,6 +61,36 @@ To download the images run the save images script.py in the Scapping Folder in t
 Then all the images are downloaded they will be stored in 20 folders based on their theme code
 
 Move all the folders to the following folder Server App -  epl - static - images
+
+
+# Server set up
+
+set up a new enviroment and install the following
+
+pip install Django==1.11
+pip install djangorestframework
+pip install markdown 
+pip install django-filter
+pip install simplejson
+pip install requests
+pip install beautifulsoup4 
+pip install unirest
+pip install urllib
+pip install urllib2
+
+## To run the server:
+
+Open a terminal window and naviage to the efl folder in server app folder in this repo.
+enter the following 
+python manage.py makemigrations rest
+python manage.py migrate
+now enter ifconfig to get your current ip
+
+python manage.py runserver curentip:8080
+
+the server will now start on this ip and can be acess by the ios app
+
+
 
 
 
