@@ -14,7 +14,7 @@ The Django app scraps the internet and uses a premier league api to garther info
 
 Everthing is developed in Python 2.7 and it is recommended that a new virtual enviroment is set up for each fold using a system such as Anaconda.
 
-All intructions are based on pip install
+All intructions are based on pip install.
 
 #Keras Cnn set Up
 
