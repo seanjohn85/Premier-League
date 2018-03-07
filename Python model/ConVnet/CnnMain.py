@@ -129,9 +129,8 @@ class Cnn(object):
 
     def graphs(self, his):
         import matplotlib.pyplot as plt
-    
+        #create acc graph
         plt.plot(his.history['acc'])  
-    
         plt.plot(his.history['val_acc']) 
         plt.title('trn. accuracy')  
         plt.ylabel('accuracy')  
@@ -141,7 +140,7 @@ class Cnn(object):
         plt.show()
         plt.savefig('acc.png')
         
-        
+        #create loss graph
         plt.plot(his.history['loss'])  
         
         plt.plot(his.history['val_loss']) 
