@@ -206,6 +206,24 @@ class GetData(object):
                    loss        = row.select_one("td:nth-of-type(6)").text,
                    gd          = row.select_one("td:nth-of-type(9)").text,
                    points      = row.select_one("td:nth-of-type(10)").text)
+                
+                
+                
+def main():
+    print('getting data')
+    #the constructor downloads the json data from the pl api
+    update = GetData()
+    #updates all the teams data
+    update.getTeams()
+    #updates all the player date in db using the json 
+    update.getPlayers()
+    #changes to the next round of fixtures and makes a prediction(see the prediction class)
+    update.getFixtures()
+    #update table
+    update.getTableSky()
+    print('no error')
+
+if __name__ == '__main__': main()
     
 
 
