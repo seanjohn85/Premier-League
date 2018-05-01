@@ -20,8 +20,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    #home directory routing
+    url(r'^$', include('mmsca2.urls')),
     url(r'^requets/', include('requets.urls')),
     url(r'^footballdata/', include('footballdata.urls')),
     url(r'^rest/', include('rest.urls')),
+    url(r'^mmsca2/', include('mmsca2.urls')),
     url(r'^admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
