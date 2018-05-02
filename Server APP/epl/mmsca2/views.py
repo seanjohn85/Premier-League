@@ -55,7 +55,8 @@ class PostListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         ctx = super(PostListView, self).get_context_data(*args, **kwargs)
-
+        ctx['create_form'] = PostModelForm()
+        ctx['action_url'] = reverse_lazy("create")
         return ctx
 
 

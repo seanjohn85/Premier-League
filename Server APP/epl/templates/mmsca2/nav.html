@@ -1,0 +1,19 @@
+<div class="navbar-fixed">
+    <nav>
+      <div class="nav-wrapper">
+        <a href="{% url 'getPosts' %}" class="brand-logo">EPL Post</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="sass.html">Sass</a></li>
+          <li><a href="badges.html">Components</a></li>
+          <li>{% include "mmsca2/search.html" %}</li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  
+<script>
+  $(document).ready(function(){
+    $('.sidenav').sidenav();
+  });
+</script>
+       

@@ -26,5 +26,6 @@ urlpatterns = [
     url(r'^footballdata/', include('footballdata.urls')),
     url(r'^rest/', include('rest.urls')),
     url(r'^mmsca2/', include('mmsca2.urls')),
-    url(r'^admin/', admin.site.urls),
+    url(r'^mmsca2/', include('mmsca2.urls')),
+    url(r'^api/mmsca2', include('mmsca2.api.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

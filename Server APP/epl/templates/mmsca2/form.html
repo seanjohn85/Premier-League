@@ -1,4 +1,15 @@
-<form class ='form' method ='POST' >{% csrf_token %}
-  {{ form.as_p }}
-  <input type="submit" value="{{btn_title}}" />
-<form>
+<div class="row">
+  <form class ='form' method ='POST' action ="{% if action_url %} {{ action_url }}{% endif %}" >
+    <div class="row">
+      <div class="input-field col s12">
+        {% csrf_token %}
+          {{ form.as_p }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input class="btn waves-effect waves-light" type="submit" value="{{btn_title}}" > </input>
+      </div>
+    </div>
+  </form>
+</div>

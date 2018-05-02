@@ -3,8 +3,13 @@
 {% block title %}Create {% endblock title %}
 
 {% block content %}
+{% if not request.GET.q %}
+<div class="row">
+  {% include "mmsca2/form.html" with form=create_form action_url="create" btn_title='Post' %}
+</div>
 
-{% include "mmsca2/search.html"  %}
+{% endif %}
+
 {% for object in object_list %}
 <div class="col s12 m8 offset-m2 l6 offset-l3">
     <div class="card-panel grey lighten-5 z-depth-1">
@@ -13,9 +18,12 @@
             <img src="https://www.madisondodgeronline.com/wp-content/uploads/2016/09/IMG_9097.png" width = "70px" alt="" class="circle responsive-img"> <!-- notice the "circle" class -->
           </div>
           <div class="col s10">
+            <h4>{{ object.returnPost }}</h4>
               <span class="black-text">
-              {{ object.returnPost }}
+              {{ object.user }} | {{ object.update }}
+
               </span>
+
           </div>
         </div>
     </div>
