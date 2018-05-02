@@ -10,6 +10,7 @@ from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
 
+
 from mmsca2.models import Post
 
 
@@ -21,9 +22,14 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['username', 'first_name', 'last_name']
 
 class PostModelSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    #read only so user details can not be manually added for posts
+    user = UserSerializer(read_only=True)
+    time = serializers.SerializerMethodField()
     class Meta:
         model = Post
-        fields = ['user',"content"]
+        fields = ['user',"content", "time"]
+        
+    def get_time(self, obj):
+        return obj.time.strftime("%b %d %y %I:%M %p")
 
 

@@ -13,14 +13,14 @@ from django.conf.urls.static import static
 from django.views.generic.base import RedirectView
 
 from . import views
-from .views import PostListAPIView
+from .views import PostListAPIView, PostCreateAPIView
 
 #from rest_framework import routers
 
 
 urlpatterns = [
     url(r'^$', PostListAPIView.as_view(), name='getPosts'),
-        
+    url(r'^create/', PostCreateAPIView.as_view(), name='create'), 
     # Examples:
     # url(r'^$', 'marine.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),

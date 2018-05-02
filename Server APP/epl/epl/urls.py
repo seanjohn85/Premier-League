@@ -28,4 +28,5 @@ urlpatterns = [
     url(r'^mmsca2/', include('mmsca2.urls')),
     url(r'^mmsca2/', include('mmsca2.urls')),
     url(r'^api/mmsca2/', include('mmsca2.api.urls')),
+    url(r'^admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,5 +1,5 @@
 <div class="row">
-  <form class ='form' method ='POST' action ="{% if action_url %} {{ action_url }}{% endif %}" >
+  <form  {% if form_id %} id ='{{form_id}}' {% endif %}   class ='form' method ='POST' action ="{% if action_url %} {{ action_url }}{% endif %}" >
     <div class="row">
       <div class="input-field col s12">
         {% csrf_token %}
@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="input-field col s12">
+      <div id ="bottom" class="input-field col s12">
         <input class="btn waves-effect waves-light" type="submit" value="{{btn_title}}" > </input>
       </div>
     </div>

@@ -6,20 +6,127 @@
 {% block script %}
 <script>
 
-$(document).ready(function(){
-    console.log("test");
+function createPost(value, newPost){
+  let post = "<div class='col s12 m8 offset-m2 l6 offset-l3'>" +
+      "<div class='card-panel grey lighten-5 z-depth-1'>" +
+          "<div class='row valign-wrapper'>"+
+            "<div class='col s2'>"+
+              "<img src='https://www.madisondodgeronline.com/wp-content/uploads/2016/09/IMG_9097.png' width = 70px' class='circle responsive-img'>"+
+            "</div>"+
+            "<div class='col s10'>"+
+              "<h4>"+value.content+"</h4>"+
+                "<span class='black-text'>"+
+                value.user.username +" | " + value.time +
+                "</span>"+
+            "</div>"+
+          "</div>"+
+      "</div>"+
+    "</div>"
+    if (newPost == true){
+      $('#posts').prepend(post)
+    }else{
+      $('#posts').append(post)
+    }
+
+
+}
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+let query = getParameterByName('q');
+
+var posts = [];
+function populate(){
+  $.each(posts, function(key, value){
+    console.log(key);
+    console.log(value.content);
+    createPost(value);
+
   });
 
-$.ajax({
-  url: "/api/mmsca2/",
-  method: "GET",
-  success: function(data){
-    console.log(data);
-  },error: function(data){
-    console.log(`errord${data}`);
-  },
+}
+
+function getPosts(){
+  $.ajax({
+    url: "/api/mmsca2/",
+    method: "GET",
+    data: {
+      'q': query
+    },
+    success: function(data){
+      console.log(data);
+
+      posts = data;
+      populate();
+
+    },error: function(data){
+      console.log(`errord${data}`);
+    },
+
+  });
+
+}
+
+getPosts();
+
+function clear(){
+  console.log("clear");
+  document.getElementById("id_content").innerHTML = "John";
+}
+
+let current = 0;
+let start = 160;
+
+$('#bottom').append("<span id='chars'>160</span>");
+
+$('#postform textarea').keyup(function(event){
+  console.log(event);
+  let postVal = $(this).val();
+  current = start - postVal.length;
+  $('#chars').text(current);
+
+})
+
+$('#postform').submit(function(event){
+  event.preventDefault();
+  let data = $(this);
+  console.log(data);
+  let formData = data.serialize();
+
+  if (current >= 0){
+    console.log(event);
+    $.ajax({
+      url: "/api/mmsca2/create/",
+      method: "POST",
+      data: formData,
+      success: function(data){
+        console.log(data);
+        createPost(data, true);
+        clear();
+        data.find("textarea").val('');
+      },error: function(data){
+        console.log(`errord${data}`);
+      },
+
+    });
+
+  }else{
+    console.log('to long');
+  }
+
 
 });
+
+
+
 
 </script>
 
@@ -28,29 +135,13 @@ $.ajax({
 {% block content %}
 {% if not request.GET.q %}
 <div class="row">
-  {% include "mmsca2/form.html" with form=create_form action_url="create" btn_title='Post' %}
+  {% include "mmsca2/form.html" with form=create_form form_id="postform" action_url="create"  btn_title='Post' %}
 </div>
 
 {% endif %}
 
-{% for object in object_list %}
-<div class="col s12 m8 offset-m2 l6 offset-l3">
-    <div class="card-panel grey lighten-5 z-depth-1">
-        <div class="row valign-wrapper">
-          <div class="col s2">
-            <img src="https://www.madisondodgeronline.com/wp-content/uploads/2016/09/IMG_9097.png" width = "70px" alt="" class="circle responsive-img"> <!-- notice the "circle" class -->
-          </div>
-          <div class="col s10">
-            <h4>{{ object.returnPost }}</h4>
-              <span class="black-text">
-              {{ object.user }} | {{ object.update }}
+<div id='posts'>
 
-              </span>
-
-          </div>
-        </div>
-    </div>
 </div>
 
-{% endfor %}
 {% endblock content %}
