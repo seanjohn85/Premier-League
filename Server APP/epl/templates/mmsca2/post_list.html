@@ -2,6 +2,29 @@
 
 {% block title %}Create {% endblock title %}
 
+
+{% block script %}
+<script>
+
+$(document).ready(function(){
+    console.log("test");
+  });
+
+$.ajax({
+  url: "/api/mmsca2/",
+  method: "GET",
+  success: function(data){
+    console.log(data);
+  },error: function(data){
+    console.log(`errord${data}`);
+  },
+
+});
+
+</script>
+
+{% endblock script %}
+
 {% block content %}
 {% if not request.GET.q %}
 <div class="row">
