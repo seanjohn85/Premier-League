@@ -15,15 +15,10 @@
     </head>
 
     <body>
-
-
-      {% for item in objects %}
-          <p>{{item.content }}<br/>
-          {{ item.user }}<br/>
-          {{ item.timestamp|timesince }} ago</p><br/><br/>
+      {% for object in object_list %}
+          <p>{{ object.returnPost }}<br/>
 
       {% endfor %}
-
 
           <!-- Compiled and minified JavaScript -->
          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

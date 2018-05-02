@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
-from dyango.urls import reverse_lazy
+from django.urls import reverse_lazy
 
 
 from .forms import PostModelForm
@@ -20,7 +20,7 @@ def index(request):
 class PostCreateView(FormUserRequiredMixin, CreateView):
     form_class = PostModelForm
     template_name = 'mmsca2/create.html'
-    success_url = "home.html"
+   #success_url = reverse_lazy("index")
 
 
     
@@ -37,14 +37,19 @@ class PostDetailView(DetailView):
 
 
 class PostListView(ListView):
-    #template_name = "tweets/list_view.html"
     queryset = Post.objects.all()
+    
+    def get_queryset(self, *args, **kwargs):
+        query = Post.objects.all()
+        print(self.request.GET)
+        print(query)
+        return query
+        
 
     def get_context_data(self, *args, **kwargs):
-        context = super(PostListView, self).get_context_data(*args, **kwargs)
-        #context["another_list"] = Tweet.objects.all()
-        #print(context)
-        return context
+        ctx = super(PostListView, self).get_context_data(*args, **kwargs)
+
+        return ctx
 
 
 #def getPost(request, pk=None):
@@ -67,7 +72,7 @@ class PostUpdateView(LoginRequiredMixin, OwnerMixin, UpdateView):
     queryset = Post.objects.all()
     form_class = PostModelForm
     template_name = 'mmsca2/update.html'
-    success_url = "home.html"
+    #success_url = reverse_lazy("index")
     
 #delete
     
@@ -75,5 +80,5 @@ class PostDeleteView(LoginRequiredMixin, OwnerMixin, DeleteView):
     model = Post
     queryset = Post.objects.all()
     template_name = 'mmsca2/delete.html'
-    success_url = reverse_lazy("home.html")
+    success_url = reverse_lazy("index")
     

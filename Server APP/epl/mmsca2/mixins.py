@@ -21,7 +21,7 @@ class FormUserRequiredMixin(object):
 class OwnerMixin(FormUserRequiredMixin, object):
     def form_valid(self, form):
         if form.instance.user == self.request.user:
-            return super(FormUserRequiredMixin, self).form_valid(form)
+            return super(OwnerMixin, self).form_valid(form)
         else:
             form._errors[forms.forms.NON_FIELD_ERRORS] = ErrorList(["You can onlt edit your own posts"])
             return self.form_invalid(form)
