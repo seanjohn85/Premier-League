@@ -1,0 +1,4 @@
+<form class ='form' method ='GET' action = '{% url "getPosts" %}'  >
+  <input type="text" name ="q" placeholder ="Search" vale ="{{request.GET.q}}" />
+  <input type="submit" value="Search" />
+<form>

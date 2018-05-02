@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
@@ -43,6 +44,12 @@ class PostListView(ListView):
         query = Post.objects.all()
         print(self.request.GET)
         print(query)
+        single = self.request.GET.get('q', None)
+        if single is not None:
+            
+            query = query.filter(
+                    Q(content__icontains=single) |
+                    Q(user__username__icontains=single))
         return query
         
 
