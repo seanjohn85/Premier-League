@@ -1,5 +1,5 @@
 <div lass="col-sm-3 col-md-3 pull-right">
-    <form class ="navbar-form" role="search" method ='GET' action = '{% url "getPosts" %}'  >
+    <form class ="navbar-form" role="search" method ='GET' action = '{% url "search" %}'  >
 
          <input id="search" type="search" name ="q" placeholder ="Search" vale ="{{request.GET.q}}" required><i class="material-icons">search</i>
          </input>

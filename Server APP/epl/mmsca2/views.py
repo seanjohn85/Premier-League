@@ -5,9 +5,14 @@ from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.views import View
+
+from django.views.generic.edit import FormView
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
-from .forms import PostModelForm
+from .forms import PostModelForm, UserRegisterForm
 from .models import Post
 
 from .mixins import FormUserRequiredMixin, OwnerMixin
@@ -17,6 +22,23 @@ def index(request):
     return render(request, "home.html")
 
 
+class UserRegisterView(FormView):
+    template_name = 'mmsca2/signup.html'
+    form_class = UserRegisterForm
+ 
+    success_url = "/mmsca2/posts/"
+    
+    def form_valid(self, form):
+        username = form.cleaned_data.get("username")
+        email = form.cleaned_data.get("email")
+        password = form.cleaned_data.get("password")
+        new_user = User.objects.create(username=username, email=email)
+        new_user.set_password(password)
+        new_user.save()
+        return super(UserRegisterView, self).form_valid(form)
+    
+
+
 #create 
 class PostCreateView(FormUserRequiredMixin, CreateView):
     form_class = PostModelForm
@@ -24,7 +46,16 @@ class PostCreateView(FormUserRequiredMixin, CreateView):
    #success_url = reverse_lazy("index")
 
 
-    
+class SearchView(View):
+    def get(self, request, *args, **kwargs):
+        query = request.GET.get("q")
+        qs = None
+        if query:
+            qs = User.objects.filter(
+                    Q(username__icontains=query)
+                )
+        context = {"users": qs}
+        return render(request, "mmsca2/post_list.html", context)    
     
     
     
@@ -60,20 +91,6 @@ class PostListView(ListView):
         return ctx
 
 
-#def getPost(request, pk=None):
-#    #gets a post from db using id
-#    post = Post.objects.get(pk=pk)
-#    print(post.content)
-#    
-#    ctx = {"object" : post}
-#    return render(request, "post.html", ctx)
-#
-#def getPosts(request):
-#    #gets a posts from db using id
-#    post = Post.objects.all()
-#    ctx = {"objects" : post}
-#    return render(request, "posts.html", ctx)
-    
 #update
         
 class PostUpdateView(LoginRequiredMixin, OwnerMixin, UpdateView):

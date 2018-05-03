@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Login  {% endblock title %}
+
+{% block content %}
+
+{% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+    {% else %}
+    <p>Please login to see this page.</p>
+    {% endif %}
+{% endif %}
+
+<form method="post" action="{% url 'register' %}">
+{% csrf_token %}
+{{ form.username.label_tag }}
+{{ form.username }}
+{{ form.email.label_tag }}
+{{ form.email }}
+{{ form.password.label_tag }}
+{{ form.password }}
+{{ form.confirm.label_tag }}
+{{ form.confirm }}
+</tr>
+</table>
+
+<input type="submit" value="Register" />
+
+</form>
+
+
+{% endblock %}

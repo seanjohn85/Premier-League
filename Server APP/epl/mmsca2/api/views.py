@@ -27,6 +27,7 @@ class PostListAPIView(generics.ListAPIView):
     
     
     def get_queryset(self, *args, **kwargs):
+        #order by newest post
         query = Post.objects.all().order_by("-time")
         print(self.request.GET)
         print(query)

@@ -56,7 +56,7 @@ INSTALLED_APPS = [
                   
 ]
 
-
+LOGIN_REDIRECT_URL = '/mmsca2/posts/'
 
 
 import djcelery

@@ -111,7 +111,6 @@ $('#postform').submit(function(event){
         console.log(data);
         createPost(data, true);
         clear();
-        data.find("textarea").val('');
       },error: function(data){
         console.log(`errord${data}`);
       },

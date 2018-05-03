@@ -1,19 +1,42 @@
+<header>
 <div class="navbar-fixed">
     <nav>
-      <div class="nav-wrapper">
-        <a href="{% url 'getPosts' %}" class="brand-logo">EPL Post</a>
+      <div class="container nav-wrapper">
+        <a href="{% url 'index' %}" class="brand-logo">EPL Post</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
-          <li><a href="sass.html">Sass</a></li>
-          <li><a href="badges.html">Components</a></li>
+          <li><a href="{% url 'login' %}">Sign In</a></li>
+          <li><a href="{% url 'register' %}">Register</a></li>
           <li>{% include "mmsca2/search.html" %}</li>
         </ul>
       </div>
     </nav>
   </div>
-  
+
+</header>
+
 <script>
   $(document).ready(function(){
     $('.sidenav').sidenav();
   });
 </script>
-       
+
+<style>
+
+nav {
+
+    background-color: #F2055C;
+
+}
+
+nav .brand-logo {
+  color: #340040!important;
+}
+
+input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default):focus:not([readonly]), input[type="password"]:not(.browser-default):focus:not([readonly]), input[type="email"]:not(.browser-default):focus:not([readonly]), input[type="url"]:not(.browser-default):focus:not([readonly]), input[type="time"]:not(.browser-default):focus:not([readonly]), input[type="date"]:not(.browser-default):focus:not([readonly]), input[type="datetime"]:not(.browser-default):focus:not([readonly]), input[type="datetime-local"]:not(.browser-default):focus:not([readonly]), input[type="tel"]:not(.browser-default):focus:not([readonly]), input[type="number"]:not(.browser-default):focus:not([readonly]), input[type="search"]:not(.browser-default):focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+    border-bottom: 1px solid #340040;
+    -webkit-box-shadow: 0 1px 0 0 #340040;
+    box-shadow: 0 1px 0 0 #340040;
+}
+
+
+</style>
