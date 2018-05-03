@@ -17,10 +17,8 @@ function createPost(value, newPost){
               "<h4>"+value.content+"</h4>"+
                 "<span class='black-text'>"+
                 value.user.username +" | " + value.time + `<a href="${value.view}"> View</a> ` +
-                console.log(user.username)
-                {% if user.username == value.user.username %}
-                ` <a href="${value.update}">Update</a> ` + ` <a href="${value.delete}"> Delete</a>` +
-                {% endif %}
+                  ` <a href="${value.update}">Update</a> ` + ` <a href="${value.delete}"> Delete</a>` +
+
                 "</span>"+
             "</div>"+
           "</div>"+

@@ -106,5 +106,5 @@ class PostDeleteView(LoginRequiredMixin, OwnerMixin, DeleteView):
     model = Post
     queryset = Post.objects.all()
     template_name = 'mmsca2/delete.html'
-    success_url = "mmsca2/post_list.html"
+    success_url = reverse_lazy("getPosts2")
     

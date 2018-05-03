@@ -3,7 +3,7 @@
 {% block title %}Login  {% endblock title %}
 
 {% block content %}
-
+<div class="centerall ">
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
@@ -30,9 +30,22 @@
 </tr>
 </table>
 
-<input type="submit" value="Register" />
+<input class="btn waves-effect waves-light" type="submit" value="Register" />
 
 </form>
+
+</div>
+
+<style>
+
+.centerall{
+  padding-top: 50px;
+  margin-top: 20px;
+  max-width: 500px;
+margin: auto;
+}
+
+</style>
 
 
 {% endblock %}

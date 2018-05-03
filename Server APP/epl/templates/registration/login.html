@@ -3,8 +3,10 @@
 {% block title %}Login  {% endblock title %}
 
 {% block content %}
+<div class="centerall ">
 
 {% if form.errors %}
+
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
 
@@ -17,20 +19,33 @@
     {% endif %}
 {% endif %}
 
-<form method="post" action="{% url 'login' %}">
-{% csrf_token %}
-{{ form.username.label_tag }}
-{{ form.username }}
-{{ form.password.label_tag }}
-{{ form.password }}
-</tr>
-</table>
 
-<input type="submit" value="login" />
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
 
-{# Assumes you setup the password_reset view in your URLconf #}
-<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+  <form method="post" action="{% url 'login' %}">
+  {% csrf_token %}
+  {{ form.username.label_tag }}
+  {{ form.username }}
+  {{ form.password.label_tag }}
+  {{ form.password }}
+
+
+  <input class="btn waves-effect waves-light" type="submit" value="login" />
+  <input type="hidden" name="next" value="{{ next }}" />
+  </form>
+
+  {# Assumes you setup the password_reset view in your URLconf #}
+  <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+
+</div>
+
+<style>
+
+.centerall{
+  margin-top: 20px;
+  max-width: 500px;
+margin: auto;
+}
+
+</style>
 
 {% endblock %}
