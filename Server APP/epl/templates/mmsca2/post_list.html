@@ -16,7 +16,11 @@ function createPost(value, newPost){
             "<div class='col s10'>"+
               "<h4>"+value.content+"</h4>"+
                 "<span class='black-text'>"+
-                value.user.username +" | " + value.time +
+                value.user.username +" | " + value.time + `<a href="${value.view}"> View</a> ` +
+                console.log(user.username)
+                {% if user.username == value.user.username %}
+                ` <a href="${value.update}">Update</a> ` + ` <a href="${value.delete}"> Delete</a>` +
+                {% endif %}
                 "</span>"+
             "</div>"+
           "</div>"+
@@ -134,7 +138,14 @@ $('#postform').submit(function(event){
 {% block content %}
 {% if not request.GET.q %}
 <div class="row">
+  {% if user.is_authenticated %}
+  <h1>Hi {{ user.username }}!</h1>
   {% include "mmsca2/form.html" with form=create_form form_id="postform" action_url="create"  btn_title='Post' %}
+{% else %}
+  <p>You are not logged in</p>
+  <a href="{% url 'login' %}">login</a>
+{% endif %}
+
 </div>
 
 {% endif %}

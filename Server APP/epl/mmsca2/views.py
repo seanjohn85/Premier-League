@@ -6,7 +6,8 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.views import View
-
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponse
 from django.views.generic.edit import FormView
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -105,5 +106,5 @@ class PostDeleteView(LoginRequiredMixin, OwnerMixin, DeleteView):
     model = Post
     queryset = Post.objects.all()
     template_name = 'mmsca2/delete.html'
-    success_url = reverse_lazy("index")
+    success_url = "mmsca2/post_list.html"
     

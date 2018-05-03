@@ -28,8 +28,9 @@ class Post(models.Model):
     def returnPost(self):
         return str(self.content)
     
+    
     def get_absolute_url(self):
-        return reverse('getpost', kwargs={"pk" : self.pk})
+        return reverse('getPost', kwargs={"pk" : self.pk})
     
     
     
